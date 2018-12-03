@@ -98,7 +98,6 @@ static int sniffa_release(struct inode *inode, struct file *file)
 static ssize_t sniffa_read(struct file *filp, char *buffer, size_t length, loff_t * offset)
 {
 	int ret = 0;
-	printk(KERN_INFO "sniffer read.\n");
 	if (copy_to_user(buffer, sniff_data, length) != 0) {
 		printk(KERN_ALERT "sniffa failed to copy.\n");
 		return -EFAULT;
@@ -164,6 +163,7 @@ static int __init sniffa_init(void){
 
 static void __exit sniffa_exit(void){
 	printk(KERN_INFO "sniffa_exit.\n");
+	dev_remove_pack(&pt);
 	device_destroy(c_net, MKDEV(major_no, 0));
 	class_unregister(c_net);
 	class_destroy(c_net);
